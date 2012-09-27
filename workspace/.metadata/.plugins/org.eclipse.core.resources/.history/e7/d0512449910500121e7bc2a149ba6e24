@@ -1,0 +1,8 @@
+package com.vosmann.runanas.data;
+
+import android.location.Location;
+
+public class RunPoint {
+	private Location location;
+
+}

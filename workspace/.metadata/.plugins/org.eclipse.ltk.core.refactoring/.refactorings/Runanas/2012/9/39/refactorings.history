@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename local variable &apos;runPointLocation&apos; in &apos;com.vosmann.runanas.data.Run.addRunPoint(...)&apos; to &apos;newRunPointLocation&apos;&#x0A;- Original project: &apos;Runanas&apos;&#x0A;- Original element: &apos;com.vosmann.runanas.data.Run.addRunPoint(Location).runPointLocation&apos;&#x0A;- Renamed element: &apos;runPointLocation&apos;&#x0A;- Update references to refactored element" description="Rename local variable &apos;runPointLocation&apos;" id="org.eclipse.jdt.ui.rename.local.variable" input="/src&lt;com.vosmann.runanas.data{Run.java[Run~addRunPoint~QLocation;@runPointLocation!829!853!838!853!QLocation;!0!true" name="newRunPointLocation" references="true" stamp="1348413137210" version="1.0"/>
+</session>

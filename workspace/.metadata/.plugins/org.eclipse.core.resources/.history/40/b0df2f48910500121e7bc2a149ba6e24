@@ -1,0 +1,6 @@
+package com.vosmann.runanas.data;
+
+public class RunPoint {
+	private Location location;
+
+}

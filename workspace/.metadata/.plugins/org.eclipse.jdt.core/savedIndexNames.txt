@@ -1,0 +1,4 @@
+INDEX VERSION 1.126+/home/vosmann/overwrite/moji-projekti/kod/runt/code/workspace/.metadata/.plugins/org.eclipse.jdt.core
+4176088703.index
+2155497057.index
+897871318.index

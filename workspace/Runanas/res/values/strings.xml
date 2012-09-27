@@ -1,0 +1,22 @@
+<resources>
+
+    <string name="app_name">Runt</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="title_activity_main">Track a run</string>
+    
+    <string name="run_length">3.2 km</string>
+    <string name="run_duration">00:18:34</string>
+    <string name="run_avg_speed">10.4 km/h</string>
+    
+    <string name="run_length_suffix"> m</string>
+    <string name="run_avg_speed_suffix"> km/h</string>
+    
+    <string name="last_location_prefix">Last location: </string>
+    
+    <string name="track_run_button_start">Start</string>
+    <string name="track_run_button_stop">Stop</string>
+    
+    <string name="no_location_service">No location service available.</string>
+
+</resources>
