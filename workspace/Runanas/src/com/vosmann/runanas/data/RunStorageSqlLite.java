@@ -1,10 +1,13 @@
 package com.vosmann.runanas.data;
 
+import com.vosmann.runanas.model.Run;
+import com.vosmann.runanas.model.RunPoint;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class RunDataStore extends SQLiteOpenHelper {
+public class RunStorageSqlLite extends SQLiteOpenHelper implements RunStorage {
 	private static final String DATABASE_NAME = "Runanas";
 	private static final int DATABASE_VERSION = 2;
 	private static final String DICTIONARY_TABLE_NAME = "Run";
@@ -13,7 +16,7 @@ public class RunDataStore extends SQLiteOpenHelper {
 					"SOME_KEY_WORD" + " TEXT, " +
 					"SOME_KEY_DEFINITION" + " TEXT);";
 	
-	public RunDataStore(Context context) {
+	public RunStorageSqlLite(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
 

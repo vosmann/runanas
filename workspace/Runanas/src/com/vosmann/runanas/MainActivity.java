@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.LinkedList;
 
-import com.vosmann.runanas.data.Run;
-import com.vosmann.runt.R;
+import com.vosmann.runanas.R;
+import com.vosmann.runanas.model.Run;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,21 +25,51 @@ import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
+/**
+ * Implements the basic functionality of the Runanas run tracking app.
+ * TODO:
+ * + finish domain model
+ * - fix all loose ends so the app can be built, deployed to phone and tested
+ * - implement storing into a local DB on the phone:
+ *   - the only classes that will need to have their own tables seem to be
+ *     RunPoint and RunMetrics
+ *   - they only need to be linked by a common Run ID. 
+ * - implement chronometer restarting once first GPS location is received
+ *   - add label/pop-up that says "acquiring first location"
+ *   - add label/pop-up that says "GO!" once location is acquired
+ * - make phone vibrate on each location update, later maybe add sound upon
+ *   updates
+ * - include a settings tab and store settings into a Settings class
+ * - make a run map tab (with these multiple map options - subtabs?)
+ *   - draw a blind map with only the contour of the run path - maybe 8bit art!!
+ *   - generate links to googlemaps using the gathered locations (this way, the
+ *     app is still private (doesn't require network connectivity)
+ *   - integrate a googlemap in to the app itself
+ * 
+ * @author vosmann
+ */
 public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
+	// TODO: Get rid of these silly logging const strings.
 	private static final String LOG_LINE =
 			"--------------------------------\n";
 	private static final String LOG_PREFIX_LINE = "--- ";
 	private static final String LOG_START = "Tracking start\n";
 	private static final String LOG_END = "Tracking end\n";
 	
+	// Interface.
 	private TextView runLengthTextView;
 	private Chronometer runDurationChronometer;
 	private TextView avgSpeedTextView;
 	private TextView lastLocationTextView;
 	
+	// Domain model.
 	private LocationManager locationManager; 
 	private LocationListener locationListener;
+	// TODO incorporate these into a Settings class.
+	private static final int WEIGHT = 78;
+	private static final int MIN_UPDATE_TIME = 1000; // 1 second.
+	private static final int MIN_UPDATE_DISTANCE = 5; // 1 second.
 	
 	private Run run;
 	
@@ -148,7 +178,7 @@ public class MainActivity extends Activity {
     }
     
     private void startTracking() {
-    	run = new Run(78); // Use a spinner or something.
+    	run = new Run(WEIGHT); // Use a spinner or something.
     	logTrackingStart();
     	updateTextViews(run);
     	// Start the Chronometer.
@@ -167,12 +197,11 @@ public class MainActivity extends Activity {
     }
     
     private void startGettingLocations() {
-    	int minTimeBetweenUpdatesGps = 10000; // 10 seconds.
     	boolean gpsEnabled =
     			locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     	if (gpsEnabled) {
     		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-    				minTimeBetweenUpdatesGps, 0, locationListener);
+    				MIN_UPDATE_TIME, MIN_UPDATE_DISTANCE, locationListener);
     	} else {
 			logPrimitively(getString(R.string.no_location_service));
 			stopTracking();
