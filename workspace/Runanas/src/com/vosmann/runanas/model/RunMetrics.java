@@ -17,18 +17,18 @@ public class RunMetrics {
 	
 	private double distance; 
 	private long duration;
-	private double averageSpeed;
-	private double fastestSpeed;
-	private double slowestSpeed;
+	private double avgSpeed;
+	private double maxSpeed;
+	private double minSpeed;
 	private double mass;
 	private double energyExpenditure;
 	
 	public RunMetrics(double mass) {
 		this.distance = 0.0;
 		this.duration = 0l;
-		this.averageSpeed = 0.0;
-		this.fastestSpeed = 0.0;
-		this.slowestSpeed = 0.0;
+		this.avgSpeed = 0.0;
+		this.maxSpeed = 0.0;
+		this.minSpeed = 0.0;
 		this.mass = mass;
 		this.energyExpenditure = 0.0;
 	}
@@ -63,24 +63,24 @@ public class RunMetrics {
 	}
 	/** Expressed in kilometers per hour. */
 	public double getAverageSpeed() {
-		return averageSpeed;
+		return avgSpeed;
 	}
 	public void setAverageSpeed(double averageSpeed) {
-		this.averageSpeed = averageSpeed;
+		this.avgSpeed = averageSpeed;
 	}
 	/** Expressed in kilometers per hour. */
 	public double getFastestSpeed() {
-		return fastestSpeed;
+		return maxSpeed;
 	}
 	public void setFastestSpeed(double fastestSpeed) {
-		this.fastestSpeed = fastestSpeed;
+		this.maxSpeed = fastestSpeed;
 	}
 	/** Expressed in kilometers per hour. */
 	public double getSlowestSpeed() {
-		return slowestSpeed;
+		return minSpeed;
 	}
 	public void setSlowestSpeed(double slowestSpeed) {
-		this.slowestSpeed = slowestSpeed;
+		this.minSpeed = slowestSpeed;
 	}
 	/**
 	 * Gets the mass of the runner.
@@ -107,13 +107,13 @@ public class RunMetrics {
 		} else {
 			distance += segmentDistance;
 			duration += segmentDuration;
-			averageSpeed = (distance / duration) * 3600.0f; // [km/h].
+			avgSpeed = (distance / duration) * 3600.0f; // [km/h].
 			double segmentSpeed = (segmentDistance / segmentDuration) * 3600.0f;
-			if (segmentSpeed > fastestSpeed) {
-				fastestSpeed = segmentSpeed;
+			if (segmentSpeed > maxSpeed) {
+				maxSpeed = segmentSpeed;
 			}
-			if (segmentSpeed < slowestSpeed) {
-				slowestSpeed = segmentSpeed;
+			if (segmentSpeed < minSpeed) {
+				minSpeed = segmentSpeed;
 			}
 			calculateEnergyExpenditure();
 		}
@@ -154,7 +154,7 @@ public class RunMetrics {
 				durationHours, durationMins, durationSecs);
 	}
 	public String formatAverageSpeed() {
-		return String.format("%.2 km/h", averageSpeed);
+		return String.format("%.2 km/h", avgSpeed);
 	}
 	public String formatMass() {
 		return String.format("%.1f", mass);
