@@ -1,4 +1,4 @@
-package com.vosmann.runanas.data;
+package com.vosmann.runanas.persistence;
 
 import com.vosmann.runanas.model.Run;
 import com.vosmann.runanas.model.RunPoint;
