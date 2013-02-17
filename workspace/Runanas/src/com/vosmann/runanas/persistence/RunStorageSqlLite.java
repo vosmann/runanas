@@ -1,5 +1,7 @@
 package com.vosmann.runanas.persistence;
 
+import java.util.List;
+
 import com.vosmann.runanas.model.Run;
 import com.vosmann.runanas.model.RunPoint;
 import com.vosmann.runanas.persistence.RunanasContract;
@@ -14,48 +16,50 @@ public class RunStorageSqlLite extends SQLiteOpenHelper implements RunStorage {
 	public static final String DATABASE_NAME = "Runanas.db";
 	
 	// Helper constants.
-	private static final String TEXT_TYPE = " TEXT";
+//	private static final String TEXT_TYPE = " TEXT";
+	private static final String INT_TYPE = " INTEGER"; // 1-8 bytes
+	private static final String REAL_TYPE = " REAL";   // 8 bytes
 	private static final String COMMA_SEP = ",";
 	
 	private static final String SQL_CREATE_RUN_METRICS =
 			"CREATE TABLE " + RunanasContract.RunMetrics.TABLE_NAME + " ("
 					+ RunanasContract.RunMetrics._ID + " INTEGER PRIMARY KEY,"
 					+ RunanasContract.RunMetrics.COLUMN_NAME_ID
-					+ TEXT_TYPE + COMMA_SEP
+					+ INT_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_DISTANCE
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_DURATION
-					+ TEXT_TYPE + COMMA_SEP
+					+ INT_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_AVG_SPEED
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_MAX_SPEED
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_MIN_SPEED
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_MASS
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunMetrics.COLUMN_NAME_ENERGY_EXPENDITURE
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ " )";
 	private static final String SQL_CREATE_RUN_POINT =
 			"CREATE TABLE " + RunanasContract.RunPoint.TABLE_NAME + " ("
 					+ RunanasContract.RunPoint._ID + " INTEGER PRIMARY KEY,"
 					+ RunanasContract.RunPoint.COLUMN_NAME_ID
-					+ TEXT_TYPE + COMMA_SEP
+					+ INT_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_ACCURACY
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_ALTITUDE
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_BEARING
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_LATITUDE
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_LONGITUDE
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_SPEED
-					+ TEXT_TYPE + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunPoint.COLUMN_NAME_TIME
-					+ TEXT_TYPE + COMMA_SEP
+					+ INT_TYPE + COMMA_SEP
 					+ " )";
 	private static final String SQL_DROP_RUN_METRICS =
 	    "DROP TABLE IF EXISTS " + RunanasContract.RunMetrics.TABLE_NAME;
@@ -78,4 +82,12 @@ public class RunStorageSqlLite extends SQLiteOpenHelper implements RunStorage {
         db.execSQL(SQL_DROP_RUN_POINT);
         onCreate(db);
     }
+
+	public void storeRunPoint(RunPoint runPoint) {
+		// TODO Auto-generated method stub
+	}
+	public List<Run> getRuns() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
