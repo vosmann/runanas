@@ -15,6 +15,7 @@ import android.util.Log;
 public class RunMetrics {
 	private static final String TAG = "RunMetrics";
 	
+	private long id; 
 	private double distance; 
 	private long duration;
 	private double avgSpeed;
@@ -47,40 +48,29 @@ public class RunMetrics {
 		}
 	}
 	
+	public long getId() {
+		return id;
+	}
+
 	/** The distance ran. Expressed in meters. */
 	public double getDistance() {
 		return distance;
-	}
-	public void setDistance(double distance) {
-			this.distance = distance;
 	}
 	/** Expressed in milliseconds. */
 	public long getDuration() {
 		return duration;
 	}
-	public void setDuration(long duration) {
-		this.duration = duration;
-	}
 	/** Expressed in kilometers per hour. */
-	public double getAverageSpeed() {
+	public double getAvgSpeed() {
 		return avgSpeed;
 	}
-	public void setAverageSpeed(double averageSpeed) {
-		this.avgSpeed = averageSpeed;
-	}
 	/** Expressed in kilometers per hour. */
-	public double getFastestSpeed() {
+	public double getMaxSpeed() {
 		return maxSpeed;
 	}
-	public void setFastestSpeed(double fastestSpeed) {
-		this.maxSpeed = fastestSpeed;
-	}
 	/** Expressed in kilometers per hour. */
-	public double getSlowestSpeed() {
+	public double getMinSpeed() {
 		return minSpeed;
-	}
-	public void setSlowestSpeed(double slowestSpeed) {
-		this.minSpeed = slowestSpeed;
 	}
 	/**
 	 * Gets the mass of the runner.
@@ -89,15 +79,9 @@ public class RunMetrics {
 	public double getMass() {
 		return mass;
 	}
-	public void setMass(double mass) {
-		this.mass = mass;
-	}
 	/** Expressed in joules [J]. */
 	public double getEnergyExpenditure() {
 		return energyExpenditure;
-	}
-	public void setEnergyExpenditure(double energyExpenditure) {
-		this.energyExpenditure = energyExpenditure;
 	}
 
 	

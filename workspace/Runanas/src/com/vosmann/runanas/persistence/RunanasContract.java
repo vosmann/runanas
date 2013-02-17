@@ -21,7 +21,7 @@ public abstract class RunanasContract {
 	
 	public static abstract class RunPoint implements BaseColumns {
 		public static final String TABLE_NAME = "runpoint";
-		public static final String COLUMN_NAME_ = "id";
+		public static final String COLUMN_NAME_ID = "id";
 		public static final String COLUMN_NAME_ACCURACY = "accuracy"; // float
 		public static final String COLUMN_NAME_ALTITUDE = "altitude"; // double
 		public static final String COLUMN_NAME_BEARING = "bearing"; // float

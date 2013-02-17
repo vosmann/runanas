@@ -18,23 +18,49 @@ public class RunStorageSqlLite extends SQLiteOpenHelper implements RunStorage {
 	private static final String COMMA_SEP = ",";
 	
 	private static final String SQL_CREATE_RUN_METRICS =
-	    "CREATE TABLE " + FeedReaderContract.FeedEntry.TABLE_NAME + " (" +
-	    FeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
-	    FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-	    FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-	    " )";	
+			"CREATE TABLE " + RunanasContract.RunMetrics.TABLE_NAME + " ("
+					+ RunanasContract.RunMetrics._ID + " INTEGER PRIMARY KEY,"
+					+ RunanasContract.RunMetrics.COLUMN_NAME_ID
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_DISTANCE
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_DURATION
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_AVG_SPEED
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_MAX_SPEED
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_MIN_SPEED
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_MASS
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunMetrics.COLUMN_NAME_ENERGY_EXPENDITURE
+					+ TEXT_TYPE + COMMA_SEP
+					+ " )";
 	private static final String SQL_CREATE_RUN_POINT =
-	    "CREATE TABLE " + FeedReaderContract.FeedEntry.TABLE_NAME + " (" +
-	    FeedReaderContract.FeedEntry._ID + " INTEGER PRIMARY KEY," +
-	    FeedReaderContract.FeedEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-	    FeedReaderContract.FeedEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-	    " )";
-
+			"CREATE TABLE " + RunanasContract.RunPoint.TABLE_NAME + " ("
+					+ RunanasContract.RunPoint._ID + " INTEGER PRIMARY KEY,"
+					+ RunanasContract.RunPoint.COLUMN_NAME_ID
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_ACCURACY
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_ALTITUDE
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_BEARING
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_LATITUDE
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_LONGITUDE
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_SPEED
+					+ TEXT_TYPE + COMMA_SEP
+					+ RunanasContract.RunPoint.COLUMN_NAME_TIME
+					+ TEXT_TYPE + COMMA_SEP
+					+ " )";
 	private static final String SQL_DROP_RUN_METRICS =
 	    "DROP TABLE IF EXISTS " + RunanasContract.RunMetrics.TABLE_NAME;
 	private static final String SQL_DROP_RUN_POINT =
 	    "DROP TABLE IF EXISTS " + RunanasContract.RunPoint.TABLE_NAME;
-	
 	
 	public RunStorageSqlLite(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -45,7 +71,6 @@ public class RunStorageSqlLite extends SQLiteOpenHelper implements RunStorage {
         db.execSQL(SQL_CREATE_RUN_METRICS);
         db.execSQL(SQL_CREATE_RUN_POINT);
     }
-    
 	@Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Revise this upgrade policy.
@@ -53,18 +78,4 @@ public class RunStorageSqlLite extends SQLiteOpenHelper implements RunStorage {
         db.execSQL(SQL_DROP_RUN_POINT);
         onCreate(db);
     }
-//	@Override
-//    public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-//        onUpgrade(db, oldVersion, newVersion);
-//    }
-
-	private static final String DICTIONARY_TABLE_NAME = "Run";
-	private static final String DICTIONARY_TABLE_CREATE =
-			"CREATE TABLE " + DICTIONARY_TABLE_NAME + " (" +
-					"SOME_KEY_WORD" + " TEXT, " +
-					"SOME_KEY_DEFINITION" + " TEXT);";
-	
-
-
-
 }
