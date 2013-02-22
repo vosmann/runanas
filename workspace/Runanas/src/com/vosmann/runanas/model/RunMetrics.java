@@ -15,7 +15,7 @@ import android.util.Log;
 public class RunMetrics {
 	private static final String TAG = "RunMetrics";
 	
-	private long id; 
+	private long runId; 
 	private double distance; 
 	private long duration;
 	private double avgSpeed;
@@ -48,8 +48,9 @@ public class RunMetrics {
 		}
 	}
 	
-	public long getId() {
-		return id;
+	/** The ID of the Run these metrics belong to. */
+	public long getRunId() {
+		return runId;
 	}
 
 	/** The distance ran. Expressed in meters. */

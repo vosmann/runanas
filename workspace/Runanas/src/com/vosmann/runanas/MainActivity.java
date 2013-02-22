@@ -221,6 +221,7 @@ public class MainActivity extends Activity {
     	Log.d(TAG, "handleNewLocation(): Starting. New location: "
     			+ location.toString());
     	// "Store" it.
+    	getContext();
     	run.addRunPoint(location);
     	updateTextViews(run);
     	logData("Distance between: " + Float.toString(distance));

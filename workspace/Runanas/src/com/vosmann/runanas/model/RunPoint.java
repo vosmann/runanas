@@ -1,7 +1,5 @@
 package com.vosmann.runanas.model;
 
-import java.util.UUID;
-
 import android.location.Location;
 
 /**
@@ -11,17 +9,18 @@ import android.location.Location;
  * @author vosmann
  */
 public class RunPoint {
-	private long id; 
+	private long runId; 
 	private Location location;
 	
-	public RunPoint(Location location) {
-		UUID uuid = UUID.randomUUID();
-		this.id = uuid.getMostSignificantBits(); // Unique enough.
+	public RunPoint(Location location, long runId) {
+//		UUID uuid = UUID.randomUUID();
+//		this.runId = uuid.getMostSignificantBits(); // Unique enough.
+		this.runId = runId;
 		this.location = location;
 	}
 
-	public long getId() {
-		return id;
+	public long getRunId() {
+		return runId;
 	}
 	public Location getLocation() {
 		return location;

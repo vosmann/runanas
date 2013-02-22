@@ -68,7 +68,7 @@ public class Run {
 		if (location == null) {
 			Log.w(TAG, "addRunPoint(Location ): Can't add a null Location!");
 		} else {
-			runPoint = new RunPoint(location);
+			runPoint = new RunPoint(location, this.id);
 		}
 		addRunPoint(runPoint);
 	}
