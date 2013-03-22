@@ -16,13 +16,13 @@ public class Run {
 	
 	private long id;
 	private List<RunPoint> runPoints;
-	private RunMetrics runMetrics;
+	private RunResult runResult;
 	
 	public Run(double mass) {
 		UUID uuid = UUID.randomUUID();
-		this.id = uuid.getMostSignificantBits(); // Unique enough.
+		this.id = uuid.getMostSignificantBits(); // Unique enough?
 		this.runPoints = new LinkedList<RunPoint>();
-		this.runMetrics = new RunMetrics(mass);
+		this.runResult = new RunResult(id, mass);
 	}
 	
 	public long getId() {
@@ -35,11 +35,21 @@ public class Run {
 	public List<RunPoint> getRunPoints() {
 		return runPoints;
 	}
-	public RunMetrics getRunMetrics() {
-		return runMetrics;
+	public RunResult getRunResult() {
+		return runResult;
 	}
 	
-	public void addRunPoint(RunPoint runPoint) {
+	public void addRunPoint(Location location) {
+		RunPoint runPoint = null;
+		if (location == null) {
+			Log.w(TAG, "addRunPoint(Location ): Can't add a null Location!");
+		} else {
+			runPoint = new RunPoint(location, this.id);
+		}
+		addRunPoint(runPoint);
+	}
+	
+	private void addRunPoint(RunPoint runPoint) {
 		if (runPoint == null) {
 			String errMsg = "addRunPoint(RunPoint): Can't add a null RunPoint!";
 			Log.w(TAG, errMsg);
@@ -57,27 +67,17 @@ public class Run {
 					lastPoint.getLocation());
 			long segmentDuration = runPoint.getLocation().getTime()
 					- lastPoint.getLocation().getTime();
-			runMetrics.update(segmentDistance, segmentDuration);
+			runResult.update(segmentDistance, segmentDuration);
 		} catch (Exception e) {
-			Log.w(TAG, "Couldn't update RunMetrics. Segment faulty.");
+			Log.w(TAG, "Couldn't update RunResult. Segment faulty.");
 		}
 	}
 	
-	public void addRunPoint(Location location) {
-		RunPoint runPoint = null;
-		if (location == null) {
-			Log.w(TAG, "addRunPoint(Location ): Can't add a null Location!");
-		} else {
-			runPoint = new RunPoint(location, this.id);
-		}
-		addRunPoint(runPoint);
-	}
-	
-	public void addRunPoints(List<Location> runPoints) {
-		for(Location runPoint : runPoints) {
-			addRunPoint(runPoint);
-		}
-	}
+//	public void addRunPoints(List<Location> runPoints) {
+//		for(Location runPoint : runPoints) {
+//			addRunPoint(runPoint);
+//		}
+//	}
 	
 	public String formatLastRunPoint() {
 		String formattedLastRunPoint = null;

@@ -32,7 +32,7 @@ import android.widget.ToggleButton;
  * - fix all loose ends so the app can be built, deployed to phone and tested
  * - implement storing into a local DB on the phone:
  *   - the only classes that will need to have their own tables seem to be
- *     RunPoint and RunMetrics
+ *     RunPoint and RunResult
  *   - they only need to be linked by a common Run ID. 
  * - implement chronometer restarting once first GPS location is received
  *   - add label/pop-up that says "acquiring first location"
