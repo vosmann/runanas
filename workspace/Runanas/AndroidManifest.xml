@@ -7,17 +7,21 @@
         android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    
 
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="15" />
 
+        <!-- android:debuggable="true" -->
     <application
-        android:debuggable="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
+		<!-- This below should disable MainActivity re-creation upon orientation
+		changes and similar events. -->
         <activity
+            android:configChanges="keyboardHidden|orientation|screenSize"
             android:name="com.vosmann.runanas.MainActivity"
             android:label="@string/title_activity_main" >
             <intent-filter>
@@ -26,6 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
+        <!-- Catching the shutdown event to save a RunResult before. -->
+        <receiver android:name=".ShutdownReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_SHUTDOWN" />
+                <!-- For some HTC models' quick shutdown option. -->
+                <action android:name="android.intent.action.QUICKBOOT_POWEROFF" />
+            </intent-filter>
+        </receiver>
 
+    </application>
 </manifest>

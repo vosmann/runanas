@@ -12,7 +12,7 @@ public class RunPoint {
 	private long runId; 
 	private Location location;
 	
-	public RunPoint(Location location, long runId) {
+	public RunPoint(long runId, Location location) {
 //		UUID uuid = UUID.randomUUID();
 //		this.runId = uuid.getMostSignificantBits(); // Unique enough.
 		this.runId = runId;

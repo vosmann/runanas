@@ -22,6 +22,7 @@ public class RunResult {
 	private double minSpeed;
 	private double mass;
 	private double energy;
+	private boolean abruptEnd;
 	
 	public RunResult(long runId, double mass) {
 		this.runId = runId;
@@ -33,12 +34,13 @@ public class RunResult {
 		this.minSpeed = 0.0;
 		this.mass = mass;
 		this.energy = 0.0;
+		this.abruptEnd = false;
 	}
 	
 	// Factory instead...?
 	public RunResult(long runId, long time, double distance, long duration,
 			double avgSpeed, double maxSpeed, double minSpeed, double mass,
-			double energy) {
+			double energy, boolean abruptEnd) {
 		this.runId = runId;
 		this.time = time;
 		this.distance = distance;
@@ -48,6 +50,7 @@ public class RunResult {
 		this.minSpeed = minSpeed;
 		this.mass = mass;
 		this.energy = energy;
+		this.abruptEnd = abruptEnd;
 	}
 	
 //	public RunResult(long runId, double mass, List<RunPoint> runPoints) {
@@ -104,8 +107,27 @@ public class RunResult {
 	public double getEnergy() {
 		return energy;
 	}
+	/**
+	 * Checks if the run was abruptly ended, e.g. by auto-shutdown due to low
+	 * battery.
+	 */
+	public boolean isAbruptEnd() {
+		return abruptEnd;
+	}
+	/**
+	 * Sets the abrupt end flag for this run. Should be invoked in situations
+	 * when run tracking cannot be continued, e.g. when auto-shutdown is
+	 * triggered due to a low battery status.
+	 */
+	public void setAbruptEnd(boolean abruptEnd) {
+		this.abruptEnd = abruptEnd;
+	}
 
-	
+	/**
+	 * Updates the RunResult object with the data from the most recent GPS lock.
+	 * @param segmentDistance Distance between the last and new GPS lock in [m].
+	 * @param segmentDuration Time between the last and a new GPS lock in [ms].
+	 */
 	public void update(double segmentDistance, long segmentDuration) {
 		if (segmentDistance < 1.0 || segmentDuration == 0) {
 			Log.w(TAG, "Segment too short to update.");

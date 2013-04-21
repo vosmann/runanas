@@ -24,7 +24,13 @@ public class Run {
 		this.runPoints = new LinkedList<RunPoint>();
 		this.runResult = new RunResult(id, mass);
 	}
-	
+	public Run(long id, List<RunPoint> runPoints, RunResult runResult) {
+		super();
+		this.id = id;
+		this.runPoints = runPoints;
+		this.runResult = runResult;
+	}
+
 	public long getId() {
 		return id;
 	}
@@ -44,7 +50,7 @@ public class Run {
 		if (location == null) {
 			Log.w(TAG, "addRunPoint(Location ): Can't add a null Location!");
 		} else {
-			runPoint = new RunPoint(location, this.id);
+			runPoint = new RunPoint(this.id, location);
 		}
 		addRunPoint(runPoint);
 	}

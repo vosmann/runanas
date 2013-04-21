@@ -56,7 +56,8 @@ public class RunanasDbHelper extends SQLiteOpenHelper {
 					+ RunanasContract.RunResult.COLUMN_NAME_MASS
 					+ REAL_TYPE + COMMA_SEP
 					+ RunanasContract.RunResult.COLUMN_NAME_ENERGY
-					+ REAL_TYPE // + COMMA_SEP
+					+ REAL_TYPE + COMMA_SEP
+					+ RunanasContract.RunResult.COLUMN_NAME_ABRUPT_END
 					+ " )";	
 	private static final String SQL_DROP_RUN_POINT =
 	    "DROP TABLE IF EXISTS " + RunanasContract.RunPoint.TABLE_NAME;
