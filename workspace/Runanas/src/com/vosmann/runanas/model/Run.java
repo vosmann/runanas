@@ -45,7 +45,7 @@ public class Run {
 		return runResult;
 	}
 	
-	public void addRunPoint(Location location) {
+	public RunPoint addRunPoint(Location location) {
 		RunPoint runPoint = null;
 		if (location == null) {
 			Log.w(TAG, "addRunPoint(Location ): Can't add a null Location!");
@@ -53,6 +53,7 @@ public class Run {
 			runPoint = new RunPoint(this.id, location);
 		}
 		addRunPoint(runPoint);
+		return runPoint;
 	}
 	
 	private void addRunPoint(RunPoint runPoint) {
@@ -85,6 +86,12 @@ public class Run {
 //		}
 //	}
 	
+	public String formatDistance() {
+		return runResult.formatDistance();
+	}
+	public String formatAverageSpeed() {
+		return runResult.formatAverageSpeed();
+	}
 	public String formatLastRunPoint() {
 		String formattedLastRunPoint = null;
 		RunPoint lastRunPoint = runPoints.get(runPoints.size());

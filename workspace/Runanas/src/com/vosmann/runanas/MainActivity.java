@@ -4,10 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.LinkedList;
-
-import com.vosmann.runanas.R;
-import com.vosmann.runanas.model.Run;
 
 import android.app.Activity;
 import android.content.Context;
@@ -16,14 +12,16 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.SystemClock;
-import android.text.format.Time;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.ToggleButton;
+
+import com.vosmann.runanas.model.Run;
+import com.vosmann.runanas.model.RunPoint;
+import com.vosmann.runanas.persistence.RunStorage;
 
 /**
  * Implements the basic functionality of the Runanas run tracking app.
@@ -50,15 +48,10 @@ import android.widget.ToggleButton;
  */
 public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
-	// TODO: Get rid of these silly logging const strings.
-	private static final String LOG_LINE =
-			"--------------------------------\n";
-	private static final String LOG_PREFIX_LINE = "--- ";
-	private static final String LOG_START = "Tracking start\n";
-	private static final String LOG_END = "Tracking end\n";
 	
 	// Interface.
-	private TextView runLengthTextView;
+	private TextView statusMessageTextView;
+	private TextView runDistanceTextView;
 	private Chronometer runDurationChronometer;
 	private TextView avgSpeedTextView;
 	private TextView lastLocationTextView;
@@ -66,11 +59,12 @@ public class MainActivity extends Activity {
 	// Domain model.
 	private LocationManager locationManager; 
 	private LocationListener locationListener;
-	// TODO incorporate these into a Settings class.
-	private static final int WEIGHT = 78;
-	private static final int MIN_UPDATE_TIME = 1000; // 1 second.
-	private static final int MIN_UPDATE_DISTANCE = 5; // 1 second.
 	
+	private static final int WEIGHT = 78; // Use a spinner or something.
+	private static final int MIN_UPDATE_TIME = 1000; // 1 second.
+	private static final int MIN_UPDATE_DISTANCE = 5;
+	
+	private boolean runStarted;
 	private Run run;
 	
     @Override
@@ -78,8 +72,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-		// Get the references to the other widgets.
-		runLengthTextView = (TextView) findViewById(R.id.run_length);
+		// Get references to the activity's widgets.
+		runDistanceTextView = (TextView) findViewById(R.id.run_length);
 		runDurationChronometer = (Chronometer) findViewById(R.id.run_duration);
 		avgSpeedTextView = (TextView) findViewById(R.id.run_avg_speed);
 		lastLocationTextView = (TextView) findViewById(R.id.last_location);
@@ -114,10 +108,6 @@ public class MainActivity extends Activity {
     	}
     }
     
-    private void logPrimitively(String message) {
-    	avgSpeedTextView.setText(avgSpeedTextView.getText() + message);
-    	runLengthTextView.setText(runLengthTextView.getText() + message);
-    }
     
     private void writeToFile(String content) {
     	String fileName = "runt-test-file.txt";
@@ -131,14 +121,14 @@ public class MainActivity extends Activity {
     	try {
     		extStorageRootDir = Environment.getExternalStorageDirectory();
     	} catch (Exception e) {
-    		logPrimitively(errorMessageDir + ": " + e.getMessage());
+    		displayMessage(errorMessageDir + ": " + e.getMessage());
     	}
     	
     	try {
     		file = new File(extStorageRootDir + "/" + fileName);
     	} catch (Exception e) {
     		// This is most probably redundant.
-    		logPrimitively(errorMessageCreateFile);
+    		displayMessage(errorMessageCreateFile);
     	}
     	try {
     		final boolean isAppend = true;
@@ -147,53 +137,23 @@ public class MainActivity extends Activity {
     		os.write(data);
     		os.close();
     	} catch (IOException e) {
-    		logPrimitively(errorMessageWriteFile + ": " + e.getMessage());
+    		displayMessage(errorMessageWriteFile + ": " + e.getMessage());
     	}
     }
     
-    private void logTrackingStart() {
-    	Time now = new Time();
-    	now.setToNow();
-    	String message = LOG_PREFIX_LINE + LOG_LINE
-    			+ LOG_PREFIX_LINE + LOG_START
-    			+ LOG_PREFIX_LINE + now.format2445() + "\n"
-    			+ LOG_PREFIX_LINE + LOG_LINE;
-    	writeToFile(message);
-    }
-    private void logTrackingEnd() {
-    	Time now = new Time();
-    	now.setToNow();
-    	String message = LOG_PREFIX_LINE + LOG_LINE
-    			+ LOG_PREFIX_LINE + LOG_END
-    			+ LOG_PREFIX_LINE + now.toString() + "\n"
-    			+ LOG_PREFIX_LINE + LOG_LINE + "\n\n";
-    	writeToFile(message);
-    }
-    private void logData(String content) {
-    	Time now = new Time();
-    	now.setToNow();
-    	String message = LOG_PREFIX_LINE + now.toString() + "\n"
-    			+ content + "\n";
-    	writeToFile(message);
-    }
-    
     private void startTracking() {
-    	run = new Run(WEIGHT); // Use a spinner or something.
-    	logTrackingStart();
+    	run = new Run(WEIGHT);
     	updateTextViews(run);
-    	// Start the Chronometer.
-    	runDurationChronometer.setBase(SystemClock.elapsedRealtime());
-    	runDurationChronometer.start();
     	// Start getting GPS locations.
     	startGettingLocations();
     }
     
     private void stopTracking() {
+    	RunStorage.storeRunResult(run.getRunResult(), this);
     	// Stop the Chronometer.
     	runDurationChronometer.stop();
     	// Stop getting GPS locations.
     	stopGettingLocations();
-    	logTrackingEnd();
     }
     
     private void startGettingLocations() {
@@ -203,7 +163,7 @@ public class MainActivity extends Activity {
     		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
     				MIN_UPDATE_TIME, MIN_UPDATE_DISTANCE, locationListener);
     	} else {
-			logPrimitively(getString(R.string.no_location_service));
+			displayMessage(getString(R.string.no_location_service));
 			stopTracking();
 		}
     }
@@ -212,7 +172,7 @@ public class MainActivity extends Activity {
     }
     
     private void updateTextViews(Run run) {
-    	runLengthTextView.setText(run.formatDistance());
+    	runDistanceTextView.setText(run.formatDistance());
     	avgSpeedTextView.setText(run.formatAverageSpeed());
     	lastLocationTextView.setText(run.formatLastRunPoint());
     }
@@ -220,10 +180,20 @@ public class MainActivity extends Activity {
     private void handleNewLocation(Location location) {
     	Log.d(TAG, "handleNewLocation(): Starting. New location: "
     			+ location.toString());
+    	if (!runStarted){
+	    	// Start the Chronometer.
+	    	// runDurationChronometer.setBase(SystemClock.elapsedRealtime()*/);
+	    	runDurationChronometer.start();
+    	}
     	// "Store" it.
-    	getContext();
-    	run.addRunPoint(location);
+    	RunPoint runPoint = run.addRunPoint(location);
     	updateTextViews(run);
-    	logData("Distance between: " + Float.toString(distance));
+    	RunStorage.storeRunPoint(runPoint, this);
+    }
+    
+    private void displayMessage(String message) {
+    	statusMessageTextView.setText(message);
+    	// avgSpeedTextView.setText(avgSpeedTextView.getText() + message);
+    	// runDistanceTextView.setText(runDistanceTextView.getText() + message);
     }
 }
