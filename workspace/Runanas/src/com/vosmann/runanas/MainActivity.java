@@ -44,14 +44,14 @@ public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
 	public static final String RUNT_LOG_FILE_NAME = "runt-test-file.txt";
 	
-	// Interface.
-	private TextView statusMessageTextView;
+	// User interface.
+	private TextView statusTextView;
 	private TextView runDistanceTextView;
 	private Chronometer runDurationChronometer;
 	private TextView avgSpeedTextView;
 	private TextView lastLocationTextView;
 	
-	// Domain model.
+	// Tracking domain necessities.
 	private LocationManager locationManager; 
 	private LocationListener locationListener;
 	
@@ -68,12 +68,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
         
 		// Get references to the activity's widgets.
+        statusTextView = (TextView) findViewById(R.id.status);
 		runDistanceTextView = (TextView) findViewById(R.id.run_length);
 		runDurationChronometer = (Chronometer) findViewById(R.id.run_duration);
 		avgSpeedTextView = (TextView) findViewById(R.id.run_avg_speed);
 		lastLocationTextView = (TextView) findViewById(R.id.last_location);
 		
-		// Prepare the location acquiring.
+		// Prepare location acquiring.
 		locationManager = (LocationManager)
 				this.getSystemService(Context.LOCATION_SERVICE);
 		locationListener = new LocationListener() {
@@ -107,6 +108,7 @@ public class MainActivity extends Activity {
     	run = new Run(WEIGHT);
     	updateTextViews(run);
     	// Start getting GPS locations.
+    	displayStatus(getString(R.string.acquiring_first_location));
     	startGettingLocations();
     }
     
@@ -116,6 +118,7 @@ public class MainActivity extends Activity {
     	runDurationChronometer.stop();
     	// Stop getting GPS locations.
     	stopGettingLocations();
+    	displayStatus(getString(R.string.tracking_stopped));
     }
     
     private void startGettingLocations() {
@@ -125,7 +128,7 @@ public class MainActivity extends Activity {
     		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
     				MIN_UPDATE_TIME, MIN_UPDATE_DISTANCE, locationListener);
     	} else {
-			displayMessage(getString(R.string.no_location_service));
+			displayStatus(getString(R.string.no_location_service));
 			stopTracking();
 		}
     }
@@ -145,6 +148,7 @@ public class MainActivity extends Activity {
     	if (!runStarted){
 	    	// Start the Chronometer.
 	    	// runDurationChronometer.setBase(SystemClock.elapsedRealtime()*/);
+	    	displayStatus(getString(R.string.first_location_acquired));
 	    	runDurationChronometer.start();
     	}
     	// "Store" it.
@@ -153,9 +157,7 @@ public class MainActivity extends Activity {
     	RunStorage.storeRunPoint(runPoint, this);
     }
     
-    private void displayMessage(String message) {
-    	statusMessageTextView.setText(message);
-    	// avgSpeedTextView.setText(avgSpeedTextView.getText() + message);
-    	// runDistanceTextView.setText(runDistanceTextView.getText() + message);
+    private void displayStatus(String message) {
+    	statusTextView.setText(message);
     }
 }
