@@ -1,17 +1,11 @@
 package com.vosmann.runanas;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -48,6 +42,7 @@ import com.vosmann.runanas.persistence.RunStorage;
  */
 public class MainActivity extends Activity {
 	private static final String TAG = "MainActivity";
+	public static final String RUNT_LOG_FILE_NAME = "runt-test-file.txt";
 	
 	// Interface.
 	private TextView statusMessageTextView;
@@ -105,39 +100,6 @@ public class MainActivity extends Activity {
     		startTracking();
     	} else {
     		stopTracking();
-    	}
-    }
-    
-    
-    private void writeToFile(String content) {
-    	String fileName = "runt-test-file.txt";
-    	final String errorMessageDir =
-    			"Couldn't get the external storage directory.";
-    	String errorMessageCreateFile = "Couldn't create the file.";
-    	String errorMessageWriteFile = "Couldn't write to the file.";
-    	
-    	File extStorageRootDir = null; 
-    	File file = null; 
-    	try {
-    		extStorageRootDir = Environment.getExternalStorageDirectory();
-    	} catch (Exception e) {
-    		displayMessage(errorMessageDir + ": " + e.getMessage());
-    	}
-    	
-    	try {
-    		file = new File(extStorageRootDir + "/" + fileName);
-    	} catch (Exception e) {
-    		// This is most probably redundant.
-    		displayMessage(errorMessageCreateFile);
-    	}
-    	try {
-    		final boolean isAppend = true;
-    		OutputStream os = new FileOutputStream(file, isAppend);
-    		byte[] data = content.getBytes();
-    		os.write(data);
-    		os.close();
-    	} catch (IOException e) {
-    		displayMessage(errorMessageWriteFile + ": " + e.getMessage());
     	}
     }
     
