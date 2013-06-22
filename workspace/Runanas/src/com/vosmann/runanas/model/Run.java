@@ -2,6 +2,7 @@ package com.vosmann.runanas.model;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import android.location.Location;
@@ -13,6 +14,7 @@ import android.util.Log;
  */
 public class Run {
 	private static final String TAG = "Run";
+	private static final Locale LOCALE = Locale.ENGLISH;
 	
 	private long id;
 	private List<RunPoint> runPoints;
@@ -97,7 +99,7 @@ public class Run {
 		RunPoint lastRunPoint = runPoints.get(runPoints.size());
 		if (lastRunPoint != null) {
 			Location lastLocation = lastRunPoint.getLocation();
-			formattedLastRunPoint = String.format("%.6f, %.6f",
+			formattedLastRunPoint = String.format(LOCALE, "%.6f, %.6f",
 					lastLocation.getLatitude(), lastLocation.getLongitude());
 		} else {
 			formattedLastRunPoint = "Last run point not available";

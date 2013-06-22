@@ -1,5 +1,8 @@
 package com.vosmann.runanas.model;
 
+import java.util.Locale;
+import java.util.UnknownFormatConversionException;
+
 import android.util.Log;
 
 /**
@@ -12,6 +15,7 @@ import android.util.Log;
  */
 public class RunResult {
 	private static final String TAG = "RunResult";
+	private static final Locale LOCALE = Locale.ENGLISH;
 	
 	private long runId; 
 	private long time; 
@@ -171,22 +175,32 @@ public class RunResult {
 	}
 	
 	public String formatDistance() {
-		return String.format("%.2f m", distance);
+		return String.format(LOCALE, "%.1f m", distance);
 	}
 	public String formatDuration() {
 		long durationSecs = duration / 1000L;
 		long durationMins = durationSecs / 60L;
 		long durationHours = durationMins / 60L;
-		return String.format("%d:%d:%d",
+		return String.format(LOCALE, "%d:%d:%d",
 				durationHours, durationMins, durationSecs);
 	}
 	public String formatAverageSpeed() {
-		return String.format("%.2 km/h", avgSpeed);
+		String result = "error";
+		try {
+			result = String.format(LOCALE, "%.2f", avgSpeed);
+		} catch (UnknownFormatConversionException e) {
+			Log.e(TAG, "UnknownFormatConversionException message: " + e.getMessage());
+			e.printStackTrace();
+		} catch (Exception e) {
+			Log.e(TAG, "Exception message: " + e.getMessage());
+			e.printStackTrace();
+		}
+		return result;
 	}
 	public String formatMass() {
-		return String.format("%.1f", mass);
+		return String.format(LOCALE, "%.1f", mass);
 	}
 	public String formatEnergy() {
-		return String.format("%.3f kJ", energy);
+		return String.format(LOCALE, "%.3f kJ", energy);
 	}
 }
